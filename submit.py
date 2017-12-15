@@ -96,7 +96,7 @@ def predict(test, tree):
             feature_dict[feature_no] = feature_val
             feature_no += 1
 
-        return_list.append(iterate_tree(tree, feature_dict))
+        return_list.append([iterate_tree(tree, feature_dict)])
 
     return return_list
 
