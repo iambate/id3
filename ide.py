@@ -33,7 +33,6 @@ def get_feature_details(train, table_rows, feature_no, labels):
             total = (no_p + no_n)* 1.0
             ig = - no_p/total*math.log(no_p/total, 2) - no_n/total*math.log(no_n/total, 2)
         return_dict[feature_val] = FeatureDetail(no_p, no_n, ig)
-        print feature_val, return_dict[feature_val]
 
     return return_dict
 
@@ -54,3 +53,16 @@ def get_class_entropy(table_rows, labels):
             no_n += 1
     total = (no_p + no_n) * 1.0
     return - no_p/total*math.log(no_p/total, 2) - no_n/total*math.log(no_n/total, 2)
+
+def get_best_feature(train, table_rows, table_cols, labels):
+    class_entropy = get_class_entropy(table_rows, labels)
+    max_gain = 0
+    best_feature = -1
+    for feature_no in table_cols:
+        feature_details = get_feature_details(train, table_rows, feature_no, labels)
+        gain = class_entropy - get_feature_entropy(feature_details, table_rows)
+        if gain > max_gain:
+            max_gain = gain
+            best_feature = feature_no
+
+    return best_feature
