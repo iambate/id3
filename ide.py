@@ -66,3 +66,13 @@ def get_best_feature(train, table_rows, table_cols, labels):
             best_feature = feature_no
 
     return best_feature
+
+def get_tables_for_feature(train, table_rows, feature_no):
+    return_dict = dict()
+    for row_no in table_rows:
+        feature_val = train[row_no][feature_no]
+        li = return_dict.get(feature_val, [])
+        li.append(row_no)
+        return_dict[feature_val] =  li
+
+    return return_dict

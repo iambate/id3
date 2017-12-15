@@ -115,4 +115,5 @@ table_rows = [ i for i in range(0, len(Xtrain))]
 table_cols = [ i for i in range(0, num_feats)]
 train = Xtrain
 labels = Ytrain
-print ide.get_best_feature(train, table_rows, table_cols, labels)
+best_feature = ide.get_best_feature(train, table_rows, table_cols, labels)
+print ide.get_tables_for_feature(train, table_rows, best_feature)
