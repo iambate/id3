@@ -73,7 +73,34 @@ def create_random_tree(depth):
 
     return root
     
-    
+
+def iterate_tree(tree, feature):
+    if tree.data == 'T':
+        return 1
+    elif tree.data == 'F':
+        return 0
+    elif tree.data not in feature.keys():
+        return 2
+    else:
+        feature_val = feature[tree.data]
+        del feature[tree.data]
+        return iterate_tree(tree.children[feature_val], feature)
+
+
+def predict(test, tree):
+    return_list = []
+    for test_row in test:
+        feature_dict = dict()
+        feature_no = 0
+        for feature_val in test_row:
+            feature_dict[feature_no] = feature_val
+            feature_no += 1
+
+        return_list.append(iterate_tree(tree, feature_dict))
+
+    return return_list
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', required=True)
 parser.add_argument('-f1', help='training file in csv format', required=True)
@@ -97,23 +124,19 @@ tree_name = args['t']
 Xtrain, Ytrain, Xtest = load_data(Xtrain_name, Xtest_name)
 
 print("Training...")
+table_rows = [ i for i in range(0, len(Xtrain))]
+table_cols = [ i for i in range(0, num_feats)]
+train = Xtrain
+labels = Ytrain
+
+# Create a decision tree
 s = create_random_tree(0)
 s.save_tree(tree_name)
 print("Testing...")
-Ypredict = []
-#generate random labels
-for i in range(0,len(Xtest)):
-	Ypredict.append([np.random.randint(0,2)])
+Ypredict = predict(Xtest, s)
 
 with open(Ytest_predict_name, "wb") as f:
     writer = csv.writer(f)
     writer.writerows(Ypredict)
 
 print("Output files generated")
-
-table_rows = [ i for i in range(0, len(Xtrain))]
-table_cols = [ i for i in range(0, num_feats)]
-train = Xtrain
-labels = Ytrain
-best_feature = ide.get_best_feature(train, table_rows, table_cols, labels)
-print ide.get_tables_for_feature(train, table_rows, best_feature)
