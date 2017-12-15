@@ -3,6 +3,7 @@ import pickle as pkl
 import argparse
 import csv
 import numpy as np
+import ide
 
 '''
 TreeNode represents a node in your decision tree
@@ -110,10 +111,9 @@ with open(Ytest_predict_name, "wb") as f:
 
 print("Output files generated")
 
-
-
-
-
-
-
-
+table_rows = [ i for i in range(0, len(Xtrain))]
+class_entropy = ide.get_class_entropy(table_rows, Ytrain)
+for feature_no in range(0, num_feats):
+    feature_details = ide.get_feature_details(Xtrain, table_rows, feature_no, Ytrain)
+    gain = class_entropy - ide.get_feature_entropy(feature_details, table_rows)
+    print gain
