@@ -6,6 +6,7 @@ import csv
 import numpy as np
 import ide
 import scipy.stats as stats
+import copy
 
 '''
 TreeNode represents a node in your decision tree
@@ -76,7 +77,7 @@ def create_random_tree(depth):
     return root
 
 def gen_decision_tree(train, table_rows, table_cols, labels):
-    label_value, either_zero = ide.get_higher_count(labels)
+    label_value, either_zero = ide.get_higher_count(table_rows,labels)
     if len(table_cols) == 0 or either_zero:
         if label_value == 1:
             return TreeNode('T',[])

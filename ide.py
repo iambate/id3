@@ -72,11 +72,11 @@ def get_best_feature(train, table_rows, table_cols, labels):
 
     return best_feature
 
-def get_higher_count(labels):
+def get_higher_count(table_rows,labels):
     zero_count = 0
     one_count = 0
-    for l in labels:
-        if l == 0:
+    for row in table_rows:
+        if labels[row] == 0:
             zero_count+=1
         else:
             one_count+=1
