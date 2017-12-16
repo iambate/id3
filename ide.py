@@ -51,8 +51,13 @@ def get_class_entropy(table_rows, labels):
             no_p += 1
         else:
             no_n += 1
-    total = (no_p + no_n) * 1.0
-    return - no_p/total*math.log(no_p/total, 2) - no_n/total*math.log(no_n/total, 2)
+    if no_p == 0 or no_n == 0:
+        return 0
+    elif no_p == no_n:
+        return 0
+    else:
+        total = (no_p + no_n) * 1.0
+        return - no_p/total*math.log(no_p/total, 2) - no_n/total*math.log(no_n/total, 2)
 
 def get_best_feature(train, table_rows, table_cols, labels):
     class_entropy = get_class_entropy(table_rows, labels)

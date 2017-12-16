@@ -132,11 +132,12 @@ def iterate_tree(tree, feature):
         return 1
     elif tree.data == 'F':
         return 0
-    elif tree.data not in feature.keys():
+    elif int(tree.data) not in feature.keys():
         return 2
     else:
-        feature_val = feature[tree.data]
-        del feature[tree.data]
+        data = int(tree.data)
+        feature_val = feature[data]
+        del feature[data]
         return iterate_tree(tree.children[feature_val - 1], feature)
 
 
