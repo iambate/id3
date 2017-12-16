@@ -117,7 +117,6 @@ def gen_decision_tree(train, table_rows, table_cols, labels,pval):
         chi_stat += dummy
 
     p_value = 1 - stats.chi2.cdf(chi_stat, len(featureSplit))
-    print "chi-square p-value is: %.3f" %p_value
 
     if p_value < 0.05:
         for k,v in featureSplit.iteritems():

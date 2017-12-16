@@ -67,7 +67,6 @@ def get_best_feature(train, table_rows, table_cols, labels):
     for feature_no in table_cols:
         feature_details = get_feature_details(train, table_rows, feature_no, labels)
         gain = class_entropy - get_feature_entropy(feature_details, table_rows)
-        print "Gain:", gain
         if gain > max_gain:
             max_gain = gain
             best_feature = feature_no
