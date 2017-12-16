@@ -1,4 +1,5 @@
 import math
+import sys
 
 class FeatureDetail:
     def __init__(self, no_p, no_n, ig):
@@ -61,11 +62,12 @@ def get_class_entropy(table_rows, labels):
 
 def get_best_feature(train, table_rows, table_cols, labels):
     class_entropy = get_class_entropy(table_rows, labels)
-    max_gain = 0
+    max_gain = -sys.maxint - 1
     best_feature = -1
     for feature_no in table_cols:
         feature_details = get_feature_details(train, table_rows, feature_no, labels)
         gain = class_entropy - get_feature_entropy(feature_details, table_rows)
+        print "Gain:", gain
         if gain > max_gain:
             max_gain = gain
             best_feature = feature_no
@@ -90,21 +92,11 @@ def get_higher_count(table_rows,labels):
         return (1,False)
 
 def get_tables_for_feature(train, table_rows, feature_no):
-    return_dict = dict()
+    return_dict = {1:[], 2:[], 3:[], 4: [], 5:[]}
     for row_no in table_rows:
         feature_val = train[row_no][feature_no - 1]
-        li = return_dict.get(feature_val, [])
+        li = return_dict.get(feature_val)
         li.append(row_no)
         return_dict[feature_val] =  li
 
     return return_dict
-
-
-
-
-
-
-
-
-
-

@@ -147,7 +147,7 @@ def iterate_tree(tree, feature):
         data = int(tree.data)
         feature_val = feature[data]
         del feature[data]
-        return iterate_tree(tree.children[feature_val - 1], feature)
+        return iterate_tree(tree.nodes[feature_val - 1], feature)
 
 
 def predict(test, tree):
