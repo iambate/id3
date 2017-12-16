@@ -86,6 +86,7 @@ def gen_decision_tree(train, table_rows, table_cols, labels):
     feat_num = ide.get_best_feature(train, table_rows, table_cols, labels)
     root = TreeNode(data = str(feat_num))
     featureSplit = ide.get_tables_for_feature(train, table_rows, feat_num)
+    print feat_num
     table_cols.remove(feat_num)
     positive_count = 0
     negative_count = 0
@@ -120,6 +121,11 @@ def gen_decision_tree(train, table_rows, table_cols, labels):
 
     if p_value < 0.05:
         for k,v in featureSplit.iteritems():
+            if len(v) == 0:
+                if label_value == 1:
+                    return TreeNode('T',[])
+                else:
+                    return TreeNode('F',[])
             copy_table_cols = copy.deepcopy(table_cols)
             root.nodes[k-1] = gen_decision_tree(train, v, copy_table_cols,labels)
     else:
