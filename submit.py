@@ -1,6 +1,7 @@
 import random
 import pickle as pkl
 import argparse
+import copy
 import csv
 import numpy as np
 import ide
@@ -118,7 +119,8 @@ def gen_decision_tree(train, table_rows, table_cols, labels):
 
     if p_value < 0.05:
         for k,v in featureSplit.iteritems():
-            root.nodes[k-1] = gen_decision_tree(train, v, table_cols,labels)
+            copy_table_cols = copy.deepcopy(table_cols)
+            root.nodes[k-1] = gen_decision_tree(train, v, copy_table_cols,labels)
     else:
         if label_value == 1:
             return TreeNode('T',[])
