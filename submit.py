@@ -91,7 +91,7 @@ def predict(test, tree):
     return_list = []
     for test_row in test:
         feature_dict = dict()
-        feature_no = 0
+        feature_no = 1
         for feature_val in test_row:
             feature_dict[feature_no] = feature_val
             feature_no += 1
@@ -125,7 +125,7 @@ Xtrain, Ytrain, Xtest = load_data(Xtrain_name, Xtest_name)
 
 print("Training...")
 table_rows = [ i for i in range(0, len(Xtrain))]
-table_cols = [ i for i in range(0, num_feats)]
+table_cols = [ i for i in range(1, num_feats + 1)]
 train = Xtrain
 labels = Ytrain
 

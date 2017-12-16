@@ -14,7 +14,7 @@ def get_feature_details(train, table_rows, feature_no, labels):
     val_pos = dict()
     val_neg = dict()
     for row_no in table_rows:
-        feature_val = train[row_no][feature_no]
+        feature_val = train[row_no][feature_no - 1]
         if(labels[row_no]==1):
             no_pos = val_pos.get(feature_val, 0)
             val_pos[feature_val] = no_pos + 1
@@ -27,7 +27,7 @@ def get_feature_details(train, table_rows, feature_no, labels):
         no_n = val_neg.get(feature_val, 0)
         if(no_p==0 or no_n==0):
             ig = 0
-        elif(no_p==no_n):
+        elif(no_p == no_n):
             ig = 1
         else:
             total = (no_p + no_n)* 1.0
@@ -70,7 +70,7 @@ def get_best_feature(train, table_rows, table_cols, labels):
 def get_tables_for_feature(train, table_rows, feature_no):
     return_dict = dict()
     for row_no in table_rows:
-        feature_val = train[row_no][feature_no]
+        feature_val = train[row_no][feature_no - 1]
         li = return_dict.get(feature_val, [])
         li.append(row_no)
         return_dict[feature_val] =  li
