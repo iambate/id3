@@ -4,6 +4,7 @@ import argparse
 import csv
 import numpy as np
 import ide
+import scipy.stats as stats
 
 '''
 TreeNode represents a node in your decision tree
@@ -72,6 +73,58 @@ def create_random_tree(depth):
         root.nodes[i] = create_random_tree(depth+1)
 
     return root
+
+def gen_decision_tree(train, table_rows, table_cols, labels):
+    label_value, either_zero = ide.get_higher_count(labels)
+    if len(table_cols) == 0 or either_zero:
+        if label_value == 1:
+            return TreeNode('T',[])
+        else:
+            return TreeNode('F',[])
+    feat_num = ide.get_best_feature(train, table_rows, table_cols, labels)
+    root = TreeNode(data = str(feat_num))
+    featureSplit = ide.get_tables_for_feature(train, table_rows, feat_num)
+    table_cols.remove(feat_num)
+    positive_count = 0
+    negative_count = 0
+    for row in table_rows:
+        if labels[row] == 0:
+            negative_count += 1
+        else:
+            positive_count += 1
+
+    chi_stat = 0.0
+    for k,v in featureSplit.iteritems():
+        expected_pos = positive_count * len(v)/float(len(table_rows))
+        expected_neg = negative_count * len(v)/float(len(table_rows))
+        observed_pos = 0
+        observed_neg = 0
+        for row in v:
+            if labels[row] == 0:
+                observed_neg += 1
+            else:
+                observed_pos += 1
+        dummy = 0.0
+        if observed_pos != 0:
+            dummy += pow(observed_pos - expected_pos, 2)/observed_pos
+
+        if observed_neg != 0:
+            dummy += pow(observed_neg - expected_neg, 2)/observed_neg
+
+        chi_stat += dummy
+
+    p_value = 1 - stats.chi2.cdf(chi_stat, len(featureSplit))
+    print "chi-square p-value is: %.3f" %p_value
+
+    if p_value < 0.05:
+        for k,v in featureSplit.iteritems():
+            root.nodes[k-1] = gen_decision_tree(train, v, table_cols,labels)
+    else:
+        if label_value == 1:
+            return TreeNode('T',[])
+        else:
+            return TreeNode('F',[])
+    return root
     
 
 def iterate_tree(tree, feature):
@@ -130,7 +183,7 @@ train = Xtrain
 labels = Ytrain
 
 # Create a decision tree
-s = create_random_tree(0)
+s = gen_decision_tree(train, table_rows, table_cols, labels)
 s.save_tree(tree_name)
 print("Testing...")
 Ypredict = predict(Xtest, s)

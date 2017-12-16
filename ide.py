@@ -67,6 +67,23 @@ def get_best_feature(train, table_rows, table_cols, labels):
 
     return best_feature
 
+def get_higher_count(labels):
+    zero_count = 0
+    one_count = 0
+    for l in labels:
+        if l == 0:
+            zero_count+=1
+        else:
+            one_count+=1
+    if zero_count == 0:
+        return (1,True)
+    if one_count == 0:
+        return (0,True)
+    if zero_count > one_count:
+        return (0,False)
+    else:
+        return (1,False)
+
 def get_tables_for_feature(train, table_rows, feature_no):
     return_dict = dict()
     for row_no in table_rows:
@@ -76,3 +93,13 @@ def get_tables_for_feature(train, table_rows, feature_no):
         return_dict[feature_val] =  li
 
     return return_dict
+
+
+
+
+
+
+
+
+
+
