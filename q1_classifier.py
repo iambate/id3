@@ -8,6 +8,8 @@ import ide
 import scipy.stats as stats
 import copy
 
+nodes_exp = 0
+
 '''
 TreeNode represents a node in your decision tree
 TreeNode can be:
@@ -77,11 +79,14 @@ def create_random_tree(depth):
     return root
 
 def gen_decision_tree(train, table_rows, table_cols, labels,pval):
+    global nodes_exp
     label_value, either_zero = ide.get_higher_count(table_rows,labels)
     if len(table_cols) == 0 or either_zero:
         if label_value == 1:
+            nodes_exp+=1
             return TreeNode('T',[])
         else:
+            nodes_exp+=1
             return TreeNode('F',[])
     feat_num = ide.get_best_feature(train, table_rows, table_cols, labels)
     root = TreeNode(data = str(feat_num))
@@ -121,16 +126,21 @@ def gen_decision_tree(train, table_rows, table_cols, labels,pval):
         for k,v in featureSplit.iteritems():
             if len(v) == 0:
                 if label_value == 1:
+                    nodes_exp+=1
                     return TreeNode('T',[])
                 else:
+                    nodes_exp+=1
                     return TreeNode('F',[])
             copy_table_cols = copy.deepcopy(table_cols)
             root.nodes[k-1] = gen_decision_tree(train, v, copy_table_cols,labels, pval)
     else:
         if label_value == 1:
+            nodes_exp+=1
             return TreeNode('T',[])
         else:
+            nodes_exp+=1
             return TreeNode('F',[])
+    nodes_exp+=1
     return root
     
 
@@ -171,7 +181,7 @@ parser.add_argument('-t', help='output tree filename', required=True)
 
 args = vars(parser.parse_args())
 
-pval = args['p']
+pval = float(args['p'])
 Xtrain_name = args['f1']
 Ytrain_name = args['f1'].split('.')[0]+ '_labels.csv' #labels filename will be the same as training file name but with _label at the end
 
@@ -201,3 +211,5 @@ with open(Ytest_predict_name, "wb") as f:
     writer.writerows(Ypredict)
 
 print("Output files generated")
+
+print "nodes exp" + str(nodes_exp)
