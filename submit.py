@@ -84,7 +84,7 @@ def iterate_tree(tree, feature):
     else:
         feature_val = feature[tree.data]
         del feature[tree.data]
-        return iterate_tree(tree.children[feature_val], feature)
+        return iterate_tree(tree.children[feature_val - 1], feature)
 
 
 def predict(test, tree):
