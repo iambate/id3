@@ -76,7 +76,7 @@ def create_random_tree(depth):
 
     return root
 
-def gen_decision_tree(train, table_rows, table_cols, labels):
+def gen_decision_tree(train, table_rows, table_cols, labels,pval):
     label_value, either_zero = ide.get_higher_count(table_rows,labels)
     if len(table_cols) == 0 or either_zero:
         if label_value == 1:
@@ -193,7 +193,7 @@ train = Xtrain
 labels = Ytrain
 
 # Create a decision tree
-s = gen_decision_tree(train, table_rows, table_cols, labels)
+s = gen_decision_tree(train, table_rows, table_cols, labels, pval)
 s.save_tree(tree_name)
 print("Testing...")
 Ypredict = predict(Xtest, s)
